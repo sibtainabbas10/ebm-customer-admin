@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="lib/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1/jquery-ui.structure.min.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1/jquery-ui.theme.min.css"/>
+    <link rel="stylesheet" href="style.css">
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="lib/moment-duration-format.js"></script>
+    <script type="text/javascript" src="lib/datatables.min.js"></script>
+    <script type="text/javascript" src="lib/datatables.sum.js"></script>
+    <script type="text/javascript" src="lib/datatables.datetime.js"></script>
+    <script src="lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="lib/jquery.validate.js"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
+
+    <script src="lib/aws-cognito-sdk.min.js"></script>
+    <script src="lib/amazon-cognito-identity.min.js"></script>
+    <script src="lib/aws-sdk.min.js"></script>
+    <script src="aws.js"></script>
+    <script src="index.js"></script>
+
+    <script>
+        if (!localStorage.getItem('user')) {
+            location.href = "/pages/signin.html"
+        }
+    </script>
+</head>
+<body>
+<div id="tabs">
+    <ul>
+<!--        <li><a href="#tabs-users" onclick="populateUserTable()">Users Table</a></li>
+        <li><a href="#tabs-session" onclick="populateSessionTable()">Session Table</a></li>-->
+        <li><a href="#tabs-customer" onclick="populateCustomerTable()">Customer Table</a></li>
+        <li><a href="#" id="logout">Logout</a></li>
+    </ul>
+<!--    <div id="tabs-users">
+        <div id="user-tcontainer" class="padding table-responsive">
+            <div class="form-group" style="padding: 10px">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="col-sm-6">
+                            <label style="line-height: 30px">Search Column: </label>
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="searchSelectUsers">
+                                <option>User Id</option>
+                                <option>Access Code</option>
+                                <option>Date Reg.</option>
+                                <option>Email</option>
+                                <option>Enabled</option>
+                                <option>First Name</option>
+                                <option>Last Name</option>
+                                <option>Highest Lesson</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" id="searchInputUsers" type="text" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+            <table id="user-table" class="table table-striped table-bordered table-hover" style="width: 100%!important;">
+                <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>Access Code</th>
+                    <th>Date Reg.</th>
+                    <th>Email</th>
+                    <th>Enabled</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Highest Lesson</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>User Id</th>
+                    <th>Access Code</th>
+                    <th>Date Reg.</th>
+                    <th>Email</th>
+                    <th>Enabled</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Highest Lesson</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>-->
+<!--    <div id="tabs-session">
+        <div id="session-tcontainer" class="padding table-responsive">
+            <div class="form-group" style="padding: 10px">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="col-sm-4">
+                            <label for="daterange" style="line-height: 30px">Date Range</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input class="form-control" name="daterange" type="text" id="daterange" style="max-width: 200px; margin-left: -10px" value="01/01/2017 - 30/07/2017">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="col-sm-6">
+                            <label style="line-height: 30px">Search Column: </label>
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="searchSelectSession">
+                                <option>User Id</option>
+                                <option>Playlist Completed</option>
+                                <option>Duration</option>
+                                <option>Start Date</option>
+                                <option>End Date</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" id="searchInputSession" type="text" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+            <table id="session-table" class="table table-striped table-bordered table-hover" style="width: 100%!important;">
+                <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>Playlist Completed</th>
+                    <th>Duration(Minutes)</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>User Id</th>
+                    <th>Playlist Completed</th>
+                    <th>Duration(Minutes)</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Total Duration: <span id="duration-sum"></span></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>-->
+    <div id="tabs-customer">
+        <div id="customer-tcontainer" class="padding table-responsive">
+            <div class="form-group" style="padding: 10px">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <!--<div class="col-sm-3">-->
+                            <!--<label for="cust-daterange" style="line-height: 30px">Date Range</label>-->
+                        <!--</div>-->
+                        <div class="col-sm-6">
+                            <input class="form-control" name="daterange" type="text" id="cust-daterange" style="max-width: 200px; margin-left: -10px" value="01/01/2017 - 30/07/2017">
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="dateRangeSearchColumn">
+                                <option value="5">Start Date</option>
+                                <option value="6">End Date</option>
+                                <option value="8">Lesson 14</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="col-sm-6">
+                            <label style="line-height: 30px">Search Column: </label>
+                        </div>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="searchSelectCustomer">
+                                <option></option>
+                                <option>Email</option>
+                                <option>Access Code</option>
+                                <option>Status</option>
+                                <option>Email must contain</option>
+                                <option>Start Date</option>
+                                <option>End Date</option>
+                                <option>Lesson 1</option>
+                                <option>Lesson 14</option>
+                                <option>Plan</option>
+                                <option>Type</option>
+                                <option>Customer Name</option>
+                                <option>Location</option>
+                                <option>How they found out</option>
+                                <option>More info 1</option>
+                                <option>More info 2</option>
+                                <option>More info 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" id="searchInputCustomer" type="text" placeholder="Search">
+                    </div>
+                </div>
+                <div style="margin-top: 20px">
+                    <div class="row">
+                        <button type="button" id="add-btn" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-plus"></i> Add</button>
+                        <button type="button" id="delete-btn" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-plus"></i> Delete</button>
+                    </div>
+                </div>
+            </div>
+            <table id="customer-table" class="table table-striped table-bordered table-hover" style="width: 100%!important;">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Email</th>
+                    <th>Access Code</th>
+                    <th>Status</th>
+                    <th>Email must contain</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Lesson 1</th>
+                    <th>Lesson 14</th>
+                    <th>Plan</th>
+                    <th>Type</th>
+                    <th>Customer Name</th>
+                    <th>Location</th>
+                    <th>How they found about</th>
+                    <th>More info 1</th>
+                    <th>More info 2</th>
+                    <th>More info 3</th>
+                </tr>
+                </thead>
+                <!--<tfoot>-->
+                <!--<tr>-->
+                    <!--<th>Email</th>-->
+                    <!--<th>Access Code</th>-->
+                    <!--<th>Status</th>-->
+                    <!--<th>Email must contain</th>-->
+                    <!--<th>Start Date</th>-->
+                    <!--<th>End Date</th>-->
+                    <!--<th>Lesson 1</th>-->
+                    <!--<th>Lesson 14</th>-->
+                <!--</tr>-->
+
+                <!--</tfoot>-->
+            </table>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <form id="userForm" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit User</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="userId">User Id</label>
+                            <input disabled type="text" class="form-control" id="userId" name="userId" placeholder="Enter user id">
+                        </div>
+                        <div class="form-group">
+                            <label for="accessCode">Access Code</label>
+                            <input type="text" class="form-control" id="accessCode" name="accessCode" placeholder="Enter access code">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date Reg.</label>
+                            <input type="text" class="form-control" id="date" name="date" placeholder="Enter date reg.">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="enabled">Enabled</label>
+                            <input type="text" class="form-control" id="enabled" name="enabled" placeholder="Enter enabled">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="highestLesson">Highest Lesson</label>
+                            <input type="number" class="form-control" id="highestLesson" name="highestLesson" placeholder="Enter highest lesson">
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="edit-btn" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="customerModal">
+        <div class="modal-dialog">
+            <form id="customerForm" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Customer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="emailInput">Email*</label>
+                            <input type="text" class="form-control" id="emailInput" name="emailInput" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="accessCodeInput">Access Code*</label>
+                            <input type="text" class="form-control" id="accessCodeInput" name="accessCodeInput" placeholder="Enter access code">
+                        </div>
+                        <div class="form-group">
+                            <label for="statusInput">Status</label>
+                            <select class="form-control" id="statusInput">
+                                <option value="true" selected="selected">true</option>
+                                <option value="false">false</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailMustContainInput">Email must contain</label>
+                            <input type="text" class="form-control" id="emailMustContainInput" name="emailMustContainInput" placeholder="Enter email must contain regex">
+                        </div>
+                        <div class="form-group">
+                            <label for="startDateInput">Start Date</label>
+                            <input type="text" class="form-control" id="startDateInput" name="startDateInput" placeholder="Enter start date (dd-MM-yyyy)">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDateInput">End Date</label>
+                            <input type="text" class="form-control" id="endDateInput" name="endDateInput" placeholder="Enter end date (dd-MM-yyyy)">
+                        </div>
+                        <div class="form-group">
+                            <label for="lesson1Input">Lesson 1</label>
+                            <input type="text" class="form-control" id="lesson1Input" name="lesson1Input" placeholder="Enter lesson 1 completed count">
+                        </div>
+                        <div class="form-group">
+                            <label for="lesson14Input">Lesson 14</label>
+                            <input type="text" class="form-control" id="lesson14Input" name="lesson14Input" placeholder="Enter lesson 14 completion date (dd-MM-yyyy)">
+                        </div>
+                        <div class="form-group">
+                            <label for="planInput">Plan</label>
+                            <input type="text" class="form-control" id="planInput" name="planInput" placeholder="Enter plan">
+                        </div>
+                        <div class="form-group">
+                            <label for="typeInput">Type</label>
+                            <input type="text" class="form-control" id="typeInput" name="typeInput" placeholder="Enter type">
+                        </div>
+                        <div class="form-group">
+                            <label for="customerNameInput">Customer Name</label>
+                            <input type="text" class="form-control" id="customerNameInput" name="customerNameInput" placeholder="Enter customer name">
+                        </div>
+                        <div class="form-group">
+                            <label for="locationInput">Location</label>
+                            <input type="text" class="form-control" id="locationInput" name="locationInput" placeholder="Enter location">
+                        </div>
+                        <div class="form-group">
+                            <label for="howFoundOutInput">How they found out</label>
+                            <input type="text" class="form-control" id="howFoundOutInput" name="howFoundOutInput" placeholder="Enter how they found out?">
+                        </div>
+                        <div class="form-group">
+                            <label for="moreInfo1Input">More info 1</label>
+                            <input type="text" class="form-control" id="moreInfo1Input" name="moreInfo1Input" placeholder="Enter more info 1">
+                        </div>
+                        <div class="form-group">
+                            <label for="moreInfo2Input">More info 2</label>
+                            <input type="text" class="form-control" id="moreInfo2Input" name="moreInfo2Input" placeholder="Enter more info 2">
+                        </div>
+                        <div class="form-group">
+                            <label for="moreInfo3Input">More info 3</label>
+                            <input type="text" class="form-control" id="moreInfo3Input" name="moreInfo3Input" placeholder="Enter more info 3">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" id="cust-edit-btn" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+Last update date: Sept 14 2019, 5:40 pm PKT
+</body>
+</html>

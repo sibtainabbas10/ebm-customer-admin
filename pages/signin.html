@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>EBM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <!-- Styles -->
+
+    <link rel="stylesheet" type="text/css" href="../lib/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.12.1/jquery-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.12.1/jquery-ui.structure.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.12.1/jquery-ui.theme.min.css"/>
+    <link rel="stylesheet" href="signin.css">
+
+    <!-- Scripts -->
+
+    <script type="text/javascript" src="../lib/jquery.js"></script>
+    <script src="../lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="../lib/jquery.validate.js"></script>
+
+    <!-- AWS Sdk-->
+    <script src="../lib/aws-cognito-sdk.min.js"></script>
+    <script src="../lib/amazon-cognito-identity.min.js"></script>
+    <script src="../lib/aws-sdk.min.js"></script>
+
+    <!-- Custom -->
+    <script src="../aws.js"></script>
+    <script src="signin.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="wrapper">
+        <form id="login" class="form-signin">
+            <h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
+            <hr class="colorgraph">
+            <br>
+
+            <input type="text" class="form-control" name="username" placeholder="Username" id="username"/>
+
+            <input type="password" class="form-control" name="password" placeholder="Password" id="password"/>
+
+            <div class="text-center" style="color: red; margin-bottom: 10px;" id="error-field"></div>
+
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit">Login</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
